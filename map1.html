@@ -192,7 +192,7 @@
                     map.on('mousemove', 'covidData_layer', function (e) {
                         const county = e.features[0].properties.county;
                         const caseRate = e.features[0].properties.rates;
-                        const densityText = caseRate ? `${caseRate} cases per 100k people` : 'No data available';
+                        const densityText = caseRate ? `${caseRate} per thousand residents` : 'No data available';
 
                         document.getElementById('text-description').innerHTML = `<h3>${county}</h3><p><strong>${densityText}</strong></p>`;
                     });

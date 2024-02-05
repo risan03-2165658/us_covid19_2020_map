@@ -30,7 +30,7 @@ Here is a snapshot example of the map (rates and counts):
 - Mapbox GL JS
 
 ## Data Sources
-- COVID-19 GeoJSON data for US counties (Year: 2020) from USBS
+COVID-19 data are sourced from The New York Times, covering all cases in 2020. Population data used for calculating case rates are from the 2018 ACS 5-year estimates and the datasets are at the county level. The U.S. county boundary shapefile was obtained from the U.S. Census Bureau. 
 
 ## Credit & Acknowledgment
 - The COVID-19 GeoJSON data is sourced from reputable sources providing updated COVID-19 statistics.
