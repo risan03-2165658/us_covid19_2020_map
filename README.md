@@ -1,7 +1,7 @@
 # us_covid19_2020_map
 
 ## Introduction
-The US-COVID 2020 Mapping Project aims to visualize COVID-19 data in the United States (2020) using interactive choropleth and point maps using Mapbox GL JS library for interactive mapping and visualization, and USCB for the data. 
+The US-COVID 2020 Mapping Project aims to visualize COVID-19 data in the United States (2020) using interactive choropleth and point maps. This project utilizes the Mapbox GL JS library for interactive mapping and visualization. The data sources include GeoJSON data for US counties (Year: 2020) from USBS.
 
 ## Link to the Maps
 - [US-COVID 2020 Rates (Choropleth map)](https://github.com/risan03-2165658/us_covid19_2020_map/map1.html)
