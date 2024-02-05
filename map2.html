@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Covid-19 Counts in the U.S. (2020)</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        #legend {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 110px;
+            background: #fff;
+            margin-right: 20px;
+            margin-bottom: 40px;
+            padding: 10px 20px 10px 10px;
+            border-radius: 3px;
+            text-align: center;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .break {
+            position: relative;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .dot {
+            display: inline-block;
+            margin-top: 5px;
+            border-radius: 50%;
+            opacity: 0.6;
+        }
+
+        .dot-label {
+            position: absolute;
+            top: 0;
+            right: 0;
+            font-style: italic;
+        }
+
+        a {
+            color: black
+        }
+
+        #popup {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: 'Open Sans', sans-serif;
+            z-index: 1000;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="popup">
+        <h3>Covid-19 Cases in the U.S.(2020)</h3>
+    </div>
+    <div id="map"></div>
+    <div id="legend"></div>
+    <script>
+        mapboxgl.accessToken =
+            'pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw';
+        let map = new mapboxgl.Map({
+            container: 'map', // container ID
+            style: 'mapbox://styles/mapbox/dark-v10', // appropriate basemap
+            zoom: 3, // appropriate zoom level
+            minZoom: 2, // set minimum zoom level
+            center: [-98.5795, 39.8283], // appropriate map center
+            renderWorldCopies: false // disable multiple world copies to ensure Albers projection works correctly
+        });
+
+        // Set the Albers projection at runtime
+        function setAlbersProjection() {
+            map.setProjection({
+                name: 'albers',
+                center: [-98.5795, 39.8283],
+                parallels: [29.5, 45.5]
+            });
+        }
+
+        const radii = [5, 10, 15, 20, 25];
+        map.on('load', () => {
+            map.addSource('covid-data', {
+                type: 'geojson',
+                data: '/assets/us-covid-2020-counts.json'
+            });
+            map.addLayer({
+                'id': 'covid-data-point',
+                'type': 'circle',
+                'source': 'covid-data',
+                'paint': {
+                    'circle-radius': {
+                        'property': 'cases',
+                        'stops': [
+                            [1000, radii[0]],
+                            [5000, radii[1]],
+                            [10000, radii[2]],
+                            [20000, radii[3]],
+                            [30000, radii[4]]
+                        ]
+                    },
+                    'circle-color': {
+                        'property': 'cases',
+                        'stops': [
+                            [1000, 'rgb(208,209,230)'],
+                            [5000, 'rgb(159,190,214)'],
+                            [10000, 'rgb(103,169,207)'],
+                            [20000, 'rgb(66,135,189)'],
+                            [30000, 'rgb(33,102,172)']
+                        ]
+                    },
+                    'circle-stroke-color': 'white',
+                    'circle-stroke-width': 1,
+                    'circle-opacity': 0.6
+                }
+            });
+
+            map.on('click', 'covid-data-point', (event) => {
+                const properties = event.features[0].properties;
+                const count = properties.cases;
+                const county = properties.county;
+                const state = properties.state;
+                const message = `<strong>County:</strong> ${county}<br><strong>State:</strong> ${state}<br><strong>Count:</strong> ${count}`;
+                new mapboxgl.Popup()
+                    .setLngLat(event.lngLat)
+                    .setHTML(message)
+                    .addTo(map);
+            });
+
+            // Call the function to set Albers projection
+            setAlbersProjection();
+        });
+
+        const legend = document.getElementById('legend');
+        var labels = ['<strong>Covid-19 Case Count</strong>'],
+            vbreak;
+        for (var i = 0; i < radii.length; i++) {
+            vbreak = (i + 1) * 10000;
+            dot_radii = 2 * radii[i];
+            labels.push(
+                '<p class="break"><i class="dot" style="background:rgb(208,209,230); width: ' + dot_radii +
+                'px; height: ' +
+                dot_radii + 'px; "></i> <span class="dot-label" style="top: ' + dot_radii / 2 + 'px;">' + vbreak +
+                '</span></p>');
+        }
+        const source =
+            '<p style="text-align: right; font-size:10pt">Source: <a href="https://earthquake.usgs.gov/earthquakes/">USGS</a></p>';
+        legend.innerHTML = labels.join('') + source;
+    </script>
+
+</body>
+
+</html>

@@ -75,3 +75,4 @@ for (var i = 0; i < grades.length; i++) {
 const source =
     '<p style="text-align: right; font-size:10pt">Source: <a href="https://earthquake.usgs.gov/earthquakes/">USGS</a></p>';
 legend.innerHTML = labels.join('') + source;
+
