@@ -9,8 +9,8 @@ The US-COVID 2020 Mapping Project aims to visualize COVID-19 data in the United 
 
 ## Screenshots
 Here is a snapshot example of the map (rates and counts): 
-![US-COVID 2020 Rates](img/map1.png)
-![US-COVID 2020 Counts](img/map2.png)
+![US-COVID 2020 Rates](img/map1.jpg)
+![US-COVID 2020 Counts](img/map2.jpg)
 
 ## Primary Functions
 
